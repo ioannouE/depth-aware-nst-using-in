@@ -4,8 +4,7 @@ Neural Style Transfer (NST) is concerned with the artistic stylization of visual
 ## Setup
 * [PyTorch](http://pytorch.org/) (version used: torch 1.8.1, torchvision 0.9.1)
 * [CUDA](https://developer.nvidia.com/cuda-downloads) and [cuDNN](https://developer.nvidia.com/cudnn) (version used: 11.0)
-To track experiments:
-* [Tensorboard](https://pytorch.org/docs/stable/tensorboard.html) (version used: 2.7.0)
+* For tracking experiments: [Tensorboard](https://pytorch.org/docs/stable/tensorboard.html) (version used: 2.7.0)
 
 
  ## Usage
