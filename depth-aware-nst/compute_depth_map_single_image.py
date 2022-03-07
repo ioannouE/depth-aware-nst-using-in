@@ -47,8 +47,7 @@ def main():
 
 
 def single_figure_with_colorbar(image, fig_name, min_value, max_value):
-    # fig = plt.imshow(image, vmin=np.min(image), vmax=np.max(image))
-    # plt.colorbar()
+
     from mpl_toolkits.axes_grid1 import make_axes_locatable
 
     plt.figure(frameon=False)
@@ -72,9 +71,7 @@ def single_figure_with_colorbar(image, fig_name, min_value, max_value):
 
 def midas_depth_image(img_org, device, args):
 
-    model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-    #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
-    #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
+    model_type = "DPT_Large"   
 
     midas = torch.hub.load("intel-isl/MiDaS", model_type)
     midas.to(device)

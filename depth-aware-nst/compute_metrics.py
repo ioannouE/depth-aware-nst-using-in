@@ -67,7 +67,6 @@ def main():
 
     # debug
     for c_img, s_img_no_depth, s_img in zip(content_images, stylised_images_no_depth, stylised_images):
-        # print(c_img, s_img_no_depth, s_img)
 
         c_image = cv2.imread(c_img)
         s_image_no_depth = cv2.imread(s_img_no_depth)
@@ -95,11 +94,9 @@ def main():
         hist_no_depth = cv2.normalize(hist_no_depth, hist_no_depth).flatten()
         hist_no_depth_score = cv2.compareHist(hist_no_depth, hist_none, cv2.HISTCMP_CORREL) # compare using correlation
 
-
         hist_depth = cv2.calcHist([s_image], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256])
         hist_depth = cv2.normalize(hist_depth, hist_depth).flatten()
         hist_depth_score = cv2.compareHist(hist_depth, hist_none, cv2.HISTCMP_CORREL) # compare using correlation
-
 
 
         # average hashing (aHash)
@@ -128,10 +125,6 @@ def main():
         label.format('Stylised (no depth)', ssim_no_depth, hist_no_depth_score, aHash_no_depth_dist, dHash_no_depth_dist) +
         label.format('Stylised (depth)', ssim_depth, hist_depth_score, aHash_depth_dist, dHash_depth_dist)
         )
-
-
-
-
 
 
 if __name__ == "__main__":

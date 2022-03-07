@@ -69,9 +69,7 @@ def main():
     device = torch.device("cuda" if args.cuda else "cpu")
     print("Device: ", torch.cuda.get_device_name(0))
 
-    model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-    #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
-    #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
+    model_type = "DPT_Large"
 
     midas = torch.hub.load("intel-isl/MiDaS", model_type)
     midas.to(device)
@@ -88,8 +86,6 @@ def main():
     # retrive content images
     content_images = []
     for img in glob.glob('images/content/*'):         
-        # image = cv2.imread(img)
-        # image = cv2.copyMakeBorder(image,10,10,10,20,cv2.BORDER_CONSTANT,value=[255,255,255])
         content_images.append(img)
 
     # stylised images
@@ -117,12 +113,7 @@ def main():
 
         # stylised images
         for img in glob.glob(path + '/*'):
-            # image = cv2.imread(img)
-            # image = cv2.copyMakeBorder(image,10,10,10,10,cv2.BORDER_CONSTANT,value=[255,255,255]) # https://stackoverflow.com/questions/42420470/opencv-subplots-images-with-titles-and-space-around-borders
             stylised_images.append(img)
-        
-    
-        # retrieve the style image or not?
 
         # check if the model has been trained with depth loss
         if args.depth_aware:
@@ -140,7 +131,6 @@ def main():
             for img in glob.glob('images/output/' + model_style + '/*'):
                 print('stylised image no depth: ', img)
                 if not COMPOSITE_IMAGE in img:
-                    # image = cv2.imread(img)
                     stylised_images_no_depth.append(img)
 
             # compute midas depth loss for stylised and stylised no depth
@@ -150,8 +140,6 @@ def main():
                 diff_img_name = path + '/' + model_style + '_diff.png'
                 r = diff(stylised_img_no_depth, stylised_img, diff_img_file=diff_img_name)
                 
-                #print(cont_img, stylised_img_no_depth, stylised_img)
-
                 c_img = cv2.imread(cont_img)
                 s_img_no_depth = cv2.imread(stylised_img_no_depth)
                 s_img = cv2.imread(stylised_img)
@@ -167,13 +155,11 @@ def main():
                 s_img = cv2.copyMakeBorder(s_img,10,10,10,10,cv2.BORDER_CONSTANT,value=[255,255,255])
                 diff_img = cv2.copyMakeBorder(diff_img,10,10,10,10,cv2.BORDER_CONSTANT,value=[255,255,255])            
 
-                # rows.append(hconcat_resize_min([c_img, s_img_no_depth, s_img, diff_img]))
                 rows.append(hconcat_resize_min([c_img, c_img_depth_img, s_img_no_depth, s_img, s_img_no_depth_depth_img, s_img_depth_img, diff_img]))
 
         
             out_img = vconcat_resize_min(rows)
             cv2.imwrite(path + '/' + COMPOSITE_IMAGE, out_img)
-            # imshow(out_img); show()
 
     if args.depth_loss:
         average_mse_depth_loss = average_mse_depth(content_images, stylised_images, midas, transform, device)
@@ -183,24 +169,6 @@ def main():
 
 # compute average mse depth loss for each content image and each stylised image
 def average_mse_depth(content_images, stylised_images, midas, transform, device):
-
-    # device = torch.device("cuda" if args.cuda else "cpu")
-    # print("Device: ", torch.cuda.get_device_name(0))
-
-    # model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-    # #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
-    # #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
-
-    # midas = torch.hub.load("intel-isl/MiDaS", model_type)
-    # midas.to(device)
-    # midas.eval()
-
-    # midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
-
-    # if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
-    #     transform = midas_transforms.dpt_transform
-    # else:
-    #     transform = midas_transforms.small_transform
 
     sum = 0
     for c_img, s_img in zip(content_images, stylised_images):
@@ -213,26 +181,10 @@ def average_mse_depth(content_images, stylised_images, midas, transform, device)
     return (sum / len(stylised_images))
 
 
+
 # function to produce depth map from a given input image
 def compute_depth_map_image(args, input_image, midas, transform, device):
-    # device = torch.device("cuda" if args.cuda else "cpu")
-    # print("Device: ", torch.cuda.get_device_name(0))
 
-    # model_type = "DPT_Large"     # MiDaS v3 - Large     (highest accuracy, slowest inference speed)
-    # #model_type = "DPT_Hybrid"   # MiDaS v3 - Hybrid    (medium accuracy, medium inference speed)
-    # #model_type = "MiDaS_small"  # MiDaS v2.1 - Small   (lowest accuracy, highest inference speed)
-
-    # midas = torch.hub.load("intel-isl/MiDaS", model_type)
-    # midas.to(device)
-    # midas.eval()
-
-    # midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
-
-    # if model_type == "DPT_Large" or model_type == "DPT_Hybrid":
-    #     transform = midas_transforms.dpt_transform
-    # else:
-    #     transform = midas_transforms.small_transform
-    
     input_batch = transform(input_image).to(device)
 
     with torch.no_grad():
@@ -247,19 +199,10 @@ def compute_depth_map_image(args, input_image, midas, transform, device):
 
     output = prediction_img.cpu().numpy()
 
-    #output = 255 * output
-    # output = output.astype(np.float64)
-    #stacked_img = np.stack((output_img,)*3, axis=-1)
-    #imshow(output); show()
-
     formatted = (output * 255 / np.max(output)).astype('uint8')
     img = Image.fromarray(formatted)
 
-    #output_img = Image.fromarray(output)
     output_img = img.convert('RGB')
-    #print(type(np.array(output_img)))
-    #print(np.array(output_img).shape)
-
     return np.array(output_img)
 
     
