@@ -2,14 +2,16 @@
 Neural Style Transfer (NST) is concerned with the artistic stylization of visual media. It can be described as the process of transferring the style of an artistic image onto an ordinary photograph. Recently, a number of studies have considered the enhancement of the depth-preserving capabilities of the NST algorithms to address the undesired effects that occur when the input content images include numerous objects at various depths. Our approach uses a deep residual convolutional network with instance normalization layers that utilizes an advanced depth prediction network to integrate depth preservation as an additional loss function to content and style. We demonstrate results that are effective in retaining the depth and global structure of content images.
 
 ## Setup
-* [PyTorch](http://pytorch.org/) (version used 1.8.1), 
-* [CUDA](https://developer.nvidia.com/cuda-downloads) (used CUDA 11.0) and [cuDNN](https://developer.nvidia.com/cudnn)
+* [PyTorch](http://pytorch.org/) (version used: torch 1.8.1, torchvision 0.9.1)
+* [CUDA](https://developer.nvidia.com/cuda-downloads) and [cuDNN](https://developer.nvidia.com/cudnn) (version used: 11.0)
+To track experiments:
+* [Tensorboard](https://pytorch.org/docs/stable/tensorboard.html) (version used: 2.7.0)
 
 
  ## Usage
 Stylize image
 ```
-python fast_neural_style/fast_neural_style.py eval --content-image </path/to/content/image> --model </path/to/saved/model> --output-image </path/to/output/image> --cuda 0
+python depth-aware-nst/fast_neural_style.py eval --content-image </path/to/content/image> --model </path/to/saved/model> --output-image </path/to/output/image> --cuda 0
 ```
 * `--content-image`: path to content image you want to stylize.
 * `--model`: saved model to be used for stylizing the image (eg: `mosaic.pth`)
@@ -19,7 +21,7 @@ python fast_neural_style/fast_neural_style.py eval --content-image </path/to/con
 
 Train model
 ```bash
-python fast_neural_style/fast_neural_style.py train --dataset </path/to/train-dataset> --style-image </path/to/style/image> --save-model-dir </path/to/save-model/folder> --epochs 2 --cuda 1
+python depth-aware-nst/fast_neural_style.py train --dataset </path/to/train-dataset> --style-image </path/to/style/image> --save-model-dir </path/to/save-model/folder> --epochs 2 --cuda 1
 ```
 
 There are several command line arguments, the important ones are listed below
