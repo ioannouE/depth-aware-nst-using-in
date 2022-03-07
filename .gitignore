@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# hpc slurm files
+*.out
+
+# ignore the new models
+saved_models/
+
+# ignore images (download them instead
+images/
+
+# ignore runs if any
+runs/
+
+# pycache in other directories
+depth-aware-nst/__pycache__
+depth-aware-nst/__pycache__/
+depth-aware-nst/__pycache__/*.pyc
