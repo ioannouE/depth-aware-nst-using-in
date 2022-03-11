@@ -39,30 +39,3 @@ def normalize_batch(batch):
     batch = batch.div_(255.0)
 
     return (batch - mean) / std
-
-
-# import os
-# from torch.utils.data import Dataset
-
-# folder_names = ['Abstract_Expressionism', 'Action_painting', 'Analytical_Cubism', 'Art_Nouveau_Modern', 'Baroque', 
-# 'Color_Field_Painting', 'Contemporary_Realism', 'Cubism', 'Early_Renaissance', 'Expressionism', 'Fauvism', 
-# 'High_Renaissance', 'Impressionism', 'Mannerism_Late_Renaissance', 'Minimalism', 'Naive_Art_Primitivism', 
-# 'New_Realism', 'Northern_Renaissance', 'Pointillism', 'Pop_Art', 'Post_Impressionism', 'Realism', 'Rococo', 
-# 'Romanticism', 'Symbolism', 'Synthetic_Cubism', 'Ukiyo_e']
-
-# class ImageDataSet(Dataset):
-
-#     def __init__(self, root='../wikiart', image_loader=None, transform=None):
-#         self.root = root
-#         self.image_files = [os.listdir(os.path.join(self.root, dir_name)) for dir_name in folder_names]
-#         self.loader = image_loader
-#         self.transform = transform
-#     def __len__(self):
-#         # Here, we need to return the number of samples in this dataset.
-#         return sum([len(folder) for folder in self.image_files])
-
-#     def __getitem__(self, index):
-#         images = [self.loader(os.path.join(self.root, dir_name, self.image_files[dir_name][index])) for dir_name in folder_names]
-#         if self.transform is not None:
-#             images = [self.transform(img) for img in images]
-#         return images
